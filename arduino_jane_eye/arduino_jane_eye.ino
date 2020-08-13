@@ -12,10 +12,16 @@
 Servo servoPitch;  // create servo object to control a servo
 Servo servoYaw;  // create servo object to control a servo
 
-void setup() {
-  servoPitch.attach(2);  // attaches the servo on pin 9 to the servo object
-  servoYaw.attach(3);  // attaches the servo on pin 9 to the servo object
+int MAX_PITCH = 180;
+int MIN_PITCH = 100;
+int MAX_YAW = 150;
+int MIN_YAW = 0;
 
+void setup() {
+  servoPitch.attach(3);  // attaches the servo on pin 9 to the servo object
+  servoYaw.attach(4);  // attaches the servo on pin 9 to the servo object
+  servoPitch.write(140);
+  servoYaw.write(80);
   Serial.begin(115200);
 }
 
@@ -25,8 +31,12 @@ void loop() {
     String valStr = Serial.readString();
     int val = atoi(valStr.c_str());
     if(servo == 'y'){
+      val = val>MAX_YAW? MAX_YAW:val;
+      val = val<MIN_YAW? MIN_YAW:val;
       servoYaw.write(val);
-    }else if(servo == "p"){
+    }else if(servo == 'p'){
+      val = val>MAX_PITCH? MAX_PITCH:val;
+      val = val<MIN_PITCH? MIN_PITCH:val;
       servoPitch.write(val);
     }
   }
